@@ -67,37 +67,37 @@
     },
     created() {
       // Get TOP game
-      axios.get('http://localhost:1991/games/topGame')
+      axios.get(this.$backUrl + '/games/topGame')
               .then(res => {
                 this.row1.label = "Top jeu";
-                this.row1.image_url = `http://localhost:1991/images/games/${res.data.id}.jpg`;
+                this.row1.image_url = this.$backUrl + `/images/games/${res.data.id}.jpg`;
               })
               .catch(err => console.log(err));
       // Get TOP player
-      axios.get('http://localhost:1991/players/topPlayer')
+      axios.get(this.$backUrl + '/players/topPlayer')
               .then(res => {
                 this.row2.label = "Top joueur";
-                this.row2.image_url = `http://localhost:1991/images/players/${res.data.id}.jpg`;
+                this.row2.image_url = this.$backUrl + `/images/players/${res.data.id}.jpg`;
               })
               .catch(err => console.log(err));
       // Get total game played
-      axios.get('http://localhost:1991/plays/total')
+      axios.get(this.$backUrl + '/plays/total')
               .then(res => {
                 this.row3.label1 = "Total parties jouées";
                 this.row3.label2 = res.data;
               })
               .catch(err => console.log(err));
       // Get last three played games
-      axios.get('http://localhost:1991/games/lastThree')
+      axios.get(this.$backUrl + '/games/lastThree')
               .then(res => {
                 this.row4.label = "Derniers jeux joués";
-                this.row4.image_url  = `http://localhost:1991/images/games/${res.data[0].id}.jpg`;
+                this.row4.image_url  = this.$backUrl + `/images/games/${res.data[0].id}.jpg`;
 
                 this.row5.label = "Derniers jeux joués";
-                this.row5.image_url  = `http://localhost:1991/images/games/${res.data[1].id}.jpg`;
+                this.row5.image_url  = this.$backUrl + `/images/games/${res.data[1].id}.jpg`;
 
                 this.row6.label = "Derniers jeux joués";
-                this.row6.image_url  = `http://localhost:1991/images/games/${res.data[2].id}.jpg`;
+                this.row6.image_url  = this.$backUrl + `/images/games/${res.data[2].id}.jpg`;
               })
               .catch(err => console.log(err));
     }

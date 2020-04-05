@@ -92,7 +92,7 @@
                 formData.append('file', this.$refs.image.files[0]);
                 formData.append('game', JSON.stringify(game));
 
-                axios.post( 'http://localhost:1991/games', formData)
+                axios.post( this.$backUrl + '/games', formData)
                     .then(() => {
                         this.$refs.image.files[0]= "";
                         this.averageTimePlayed = "";

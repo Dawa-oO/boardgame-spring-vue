@@ -20,7 +20,7 @@
         props: ["game"],
         data() {
             return {
-                image_url: `http://localhost:1991/images/games/${this.game.id}.jpg`,
+                image_url: this.$backUrl + `/images/games/${this.game.id}.jpg`,
                 nbPlaysPlayed: 0,
                 topPlayer: {pseudo:"", nbVictory: 0},
                 topScore: 0
@@ -28,16 +28,16 @@
         },
         created() {
             // Get total nb plays played for this game
-            axios.get(`http://localhost:1991/plays/total/${this.game.id}`)
+            axios.get(this.$backUrl + `/plays/total/${this.game.id}`)
                 .then(res => {
                     this.nbPlaysPlayed = res.data;
                 })
                 .catch(err => console.log(err));
             // Get top player for this game
-            axios.get(`http://localhost:1991/plays/topPlayer/${this.game.id}`)
+            axios.get(this.$backUrl + `/plays/topPlayer/${this.game.id}`)
                 .then(res => {
                     this.topPlayer.nbVictory = res.data.nbVictory;
-                    axios.get(`http://localhost:1991/players/${res.data.winnerId}`)
+                    axios.get(this.$backUrl + `/players/${res.data.winnerId}`)
                         .then(res2 =>{
                             this.topPlayer.pseudo = res2.data.pseudo;
                         })
@@ -45,7 +45,7 @@
                 })
                 .catch(err => console.log(err));
             // Get top score for this game
-            axios.get(`http://localhost:1991/plays/topScore/${this.game.id}`)
+            axios.get(this.$backUrl + `/plays/topScore/${this.game.id}`)
                 .then(res => {
                     this.topScore = res.data;
                 })

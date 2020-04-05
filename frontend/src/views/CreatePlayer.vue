@@ -71,7 +71,7 @@
                 formData.append('file', this.$refs.image.files[0]);
                 formData.append('player', JSON.stringify(player));
 
-                axios.post( 'http://localhost:1991/players', formData)
+                axios.post( this.$backUrl + '/players', formData)
                     .then(() => {
                         this.image="";
                         this.pseudo = "";

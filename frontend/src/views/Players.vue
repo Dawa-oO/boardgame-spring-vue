@@ -42,7 +42,7 @@
       fetchData () {
         this.loading = true;
         // Get all players
-        axios.get('http://localhost:1991/players')
+        axios.get(this.$backUrl + '/players')
                 .then(res => {
                   this.loading = false;
                   this.players = res.data;

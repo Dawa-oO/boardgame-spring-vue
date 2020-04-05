@@ -17,12 +17,12 @@
         props: ["player"],
         data() {
             return {
-                image_url: `http://localhost:1991/images/players/${this.player.id}.jpg`,
+                image_url: this.$backUrl + `/images/players/${this.player.id}.jpg`,
                 nbPlaysWin: 0
             }
         },
         created() {
-            axios.get(`http://localhost:1991/plays/total/players/${this.player.id}`)
+            axios.get(this.$backUrl + `/plays/total/players/${this.player.id}`)
                 .then(res => {
                     this.nbPlaysWin = res.data;
                 })

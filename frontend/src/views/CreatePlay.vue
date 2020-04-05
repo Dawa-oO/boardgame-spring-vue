@@ -58,12 +58,12 @@
             }
         },
         created() {
-            axios.get('http://localhost:1991/games')
+            axios.get(this.$backUrl + '/games')
                 .then(res => {
                     this.games = res.data;
                 })
                 .catch(err => console.log(err));
-            axios.get('http://localhost:1991/players')
+            axios.get(this.$backUrl + '/players')
                 .then(res => {
                     this.players = res.data;
                 })
@@ -103,7 +103,7 @@
                     "score": this.score
                 };
 
-                axios.post( 'http://localhost:1991/plays', play, {
+                axios.post( this.$backUrl + '/plays', play, {
                     headers: {
                         'Content-Type': 'application/json'
                     }})
