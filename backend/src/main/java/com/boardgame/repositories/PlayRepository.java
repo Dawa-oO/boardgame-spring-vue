@@ -12,7 +12,7 @@ public interface PlayRepository extends JpaRepository<Play, Integer> {
 
     Long countPlayByGame(Game id);
 
-    @Query(value = "SELECT winner_id AS winnerId, COUNT(winner_id) AS nbVictory FROM BOARDGAMES.play WHERE game_id = ?1 GROUP BY winner_id LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT winner_id AS winnerId, COUNT(winner_id) AS nbVictory FROM boardgames.play WHERE game_id = ?1 GROUP BY winner_id ORDER BY COUNT(winner_id) DESC LIMIT 1", nativeQuery = true)
     TopPlayerByGame getTopPlayerByGameId(int gameId);
 
     Play findFirstByGameOrderByScoreDesc(Game id);

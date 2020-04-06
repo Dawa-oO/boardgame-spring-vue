@@ -3,7 +3,7 @@ import App from './App.vue'
 import router from './router'
 
 Vue.config.productionTip = false
-Vue.prototype.$backUrl = "http://192.168.1.38:1991"
+Vue.prototype.$backUrl = "http://81.51.193.100:1991"
 
 new Vue({
   router,

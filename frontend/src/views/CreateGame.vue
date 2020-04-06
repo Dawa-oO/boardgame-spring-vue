@@ -18,11 +18,11 @@
             </div>
             <div class="form-group">
                 <label for="minNbPlayers">Nombre de joueur minimum</label>
-                <input type="number" class="form-control" id="minNbPlayers" v-model="minNbPlayers" name="minNbPlayers" min="1" required>
+                <input type="number" class="form-control" id="minNbPlayers" v-model="minNbPlayers" name="minNbPlayers" min="0" required>
             </div>
             <div class="form-group">
                 <label for="maxNbPlayers">Nombre de joueur maximum</label>
-                <input type="number" class="form-control" id="maxNbPlayers" v-model="maxNbPlayers" name="maxNbPlayers" min="1" required>
+                <input type="number" class="form-control" id="maxNbPlayers" v-model="maxNbPlayers" name="maxNbPlayers" min="0" required>
             </div>
             <div class="form-group">
                 <label for="averageTimePlayed">Durée moyenne d'une partie</label>
@@ -94,19 +94,19 @@
 
                 axios.post( this.$backUrl + '/games', formData)
                     .then(() => {
-                        this.$refs.image.files[0]= "";
-                        this.averageTimePlayed = "";
-                        this.maxNbPlayers = "";
-                        this.minNbPlayers = "";
+                        this.image= "";
+                        this.averageTimePlayed = 0;
+                        this.maxNbPlayers = 0;
+                        this.minNbPlayers = 0;
                         this.name = "";
                         Vue.$toast.open({
                             message: 'Jeu créé',
                             type: 'success'
                         });
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         Vue.$toast.open({
-                            message: 'Erreur lors de la création',
+                            message: 'Erreur lors de la création : ' + err,
                             type: 'error'
                         });
                     });

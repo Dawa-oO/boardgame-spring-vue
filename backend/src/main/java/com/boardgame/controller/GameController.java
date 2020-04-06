@@ -97,7 +97,8 @@ public class GameController {
     @GetMapping("/topGame")
     public @ResponseBody
     GameDto getTopGame() {
-        return translator.translateGameToGameDto(gameRepository.getTopGame());
+        Integer id = gameRepository.getTopGameId();
+        return id != null ? gameRepository.findById(id).map(translator::translateGameToGameDto).orElse(null) : null;
     }
 
     @ApiOperation(value = "Retrieve the three last played games ")

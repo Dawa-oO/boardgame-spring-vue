@@ -7,9 +7,9 @@
         <!-- Card 1x1 -->
         <CardImage v-bind:row="row1" />
         <!-- Card 2x1 -->
-        <CardImage v-bind:row="row2" />
-        <!-- Card 3x1 -->
         <CardText v-bind:row="row3" />
+        <!-- Card 3x1 -->
+        <CardImage v-bind:row="row2" />
       </div>
 
       <!-- 2nd row -->

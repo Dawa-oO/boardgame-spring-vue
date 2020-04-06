@@ -85,7 +85,8 @@ public class PlayerController {
     @ApiOperation(value = "Retrieve the player with the most wins")
     @GetMapping("/topPlayer")
     public @ResponseBody PlayerDto getTopPlayer() {
-        return translator.translatePlayerToPlayerDto(playerRepository.getTopPlayer());
+        Integer id = playerRepository.getTopPlayerId();
+        return id != null ? playerRepository.findById(id).map(translator::translatePlayerToPlayerDto).orElse(null) : null;
     }
 
 }
