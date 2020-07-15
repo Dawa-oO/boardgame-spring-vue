@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 
 Vue.config.productionTip = false
-Vue.prototype.$backUrl = "http://81.51.193.100:1991"
+/* $backUrl = livebox admin > Informations system > Internet > Adresse IPv4 WAN */
+Vue.prototype.$backUrl = "http://86.216.117.105:1991"
 
 new Vue({
   router,
