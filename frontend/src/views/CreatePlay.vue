@@ -1,149 +1,143 @@
 <template>
-    <div class="createPlay">
-        <h2>Ajouter une partie</h2>
-        <form @submit="checkForm">
-            <p class="red" v-if="errors.length">
-                <b>Erreur(s) dans le formulaire :</b>
-            <ul>
-                <li v-bind:key="error" v-for="error in errors">{{ error }}</li>
-            </ul>
-            </p>
-            <div class="form-group">
-                <label for="game">Jeu</label><br/>
-                <select id="game" v-model="game" name="game" required>
-                    <option disabled value="">Choisissez un jeu</option>
-                    <option v-bind:key="oneGame.id" v-for="oneGame in games" :value="oneGame.id">{{oneGame.name}}</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="winner">Vainqueur</label><br/>
-                <select id="winner" v-model="winner" name="winner" required>
-                    <option disabled value="">Choisissez un joueur</option>
-                    <option v-bind:key="onePlayer.id" v-for="onePlayer in players" :value="onePlayer.id">{{onePlayer.firstName}} ({{onePlayer.pseudo}})</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="score">Scrore maximal</label>
-                <input type="number" class="form-control" id="score" v-model="score" name="score" required>
-            </div>
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" v-model="date" name="date" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Créer</button>
-        </form>
-    </div>
+  <v-form ref="form" v-model="valid" lazy-validation>
+    <h2>Ajouter une partie</h2>
+    <v-select
+      v-model="game"
+      item-text="name"
+      item-value="id"
+      :items="games"
+      :rules="[(v) => !!v || 'Jeu obligatoire']"
+      label="Jeux"
+      required
+    ></v-select>
+
+    <v-select
+      v-model="winner"
+      item-text="pseudo"
+      item-value="id"
+      :items="players"
+      :rules="[(v) => !!v || 'Vainqueur obligatoire']"
+      label="Vainqueur"
+      required
+    ></v-select>
+
+    <v-text-field
+      v-model="score"
+      :rules="[(v) => !!v || 'Score obligatoire']"
+      label="Score maximal"
+      required
+    ></v-text-field>
+
+    <v-menu
+      ref="menu"
+      v-model="menu"
+      :close-on-content-click="false"
+      :return-value.sync="date"
+      transition="scale-transition"
+      offset-y
+      min-width="290px"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-text-field
+          v-model="date"
+          label="Picker in menu"
+          prepend-icon="mdi-calendar"
+          readonly
+          v-bind="attrs"
+          v-on="on"
+        ></v-text-field>
+      </template>
+      <v-date-picker v-model="date" no-title scrollable>
+        <v-spacer></v-spacer>
+        <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+        <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn>
+      </v-date-picker>
+    </v-menu>
+
+    <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
+      Créer
+    </v-btn>
+  </v-form>
 </template>
 
 <script>
+import Vue from "vue";
+import VueToast from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-default.css";
 
-    import Vue from 'vue';
-    import VueToast from 'vue-toast-notification';
-    import 'vue-toast-notification/dist/theme-default.css';
-    import axios from 'axios';
+Vue.use(VueToast);
 
-    Vue.use(VueToast);
-
-    export default {
-        name: 'CreatePlay',
-        data() {
-            return {
-                errors: [],
-                games: [],
-                players: [],
-                game: "",
-                winner: "",
-                score: "",
-                date: ""
-            }
+export default {
+  name: "CreatePlay",
+  data() {
+    return {
+      valid: true,
+      menu: false,
+      games: [],
+      players: [],
+      game: "",
+      winner: "",
+      score: "",
+      date: new Date().toISOString().substr(0, 10),
+    };
+  },
+  created() {
+    this.axios
+      .get(this.$backUrl + "/games")
+      .then((res) => {
+        this.games = res.data;
+      })
+      .catch((err) => console.log(err));
+    this.axios
+      .get(this.$backUrl + "/players")
+      .then((res) => {
+        this.players = res.data;
+      })
+      .catch((err) => console.log(err));
+  },
+  methods: {
+    validate() {
+      this.$refs.form.validate();
+      this.addPlay();
+    },
+    addPlay() {
+      const play = {
+        game: {
+          id: this.game,
         },
-        created() {
-            axios.get(this.$backUrl + '/games')
-                .then(res => {
-                    this.games = res.data;
-                })
-                .catch(err => console.log(err));
-            axios.get(this.$backUrl + '/players')
-                .then(res => {
-                    this.players = res.data;
-                })
-                .catch(err => console.log(err));
+        gameDate: this.date,
+        player: {
+          id: this.winner,
         },
-        methods: {
-            checkForm: function (e) {
-                if (this.game && this.winner && this.score && this.date) {
-                    this.addPlayer();
-                }
-                this.errors = [];
-
-                if (!this.game) {
-                    this.errors.push('Le jeu est requis.');
-                }
-                if (!this.winner) {
-                    this.errors.push('Le joueur est requis.');
-                }
-                if (!this.score) {
-                    this.errors.push('Le score est requis.');
-                }
-                if (!this.date) {
-                    this.errors.push('La date est requise.');
-                }
-
-                e.preventDefault();
-            },
-            addPlayer() {
-                const play = {
-                    "game": {
-                        "id": this.game
-                    },
-                    "gameDate": this.date,
-                    "player": {
-                        "id": this.winner
-                    },
-                    "score": this.score
-                };
-
-                axios.post( this.$backUrl + '/plays', play, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }})
-                    .then(() => {
-                        this.game="";
-                        this.date = "";
-                        this.winner = "";
-                        this.score = "";
-                        Vue.$toast.open({
-                            message: 'Partie créée',
-                            type: 'success'
-                        });
-                    })
-                    .catch(() => {
-                        Vue.$toast.open({
-                            message: 'Erreur lors de la création',
-                            type: 'error'
-                        });
-                    });
-            }
-        }
-    }
-
+        score: this.score,
+      };
+      this.axios
+        .post(this.$backUrl + "/plays", play, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then(() => {
+          this.game = "";
+          this.date = "";
+          this.winner = "";
+          this.score = "";
+          Vue.$toast.open({
+            message: "Partie créée",
+            type: "success",
+          });
+          this.$refs.form.reset();
+        })
+        .catch(() => {
+          Vue.$toast.open({
+            message: "Erreur lors de la création",
+            type: "error",
+          });
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-    .createPlay {
-        max-width: 40%;
-        margin-top: 2%;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: left;
-    }
-    button {
-        float: right;
-    }
-    label {
-        font-weight: bold;
-    }
-    .red {
-        color: red;
-    }
 </style>

@@ -14,32 +14,32 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'Accueil',
+      name: 'Home',
       component: Home
     },
     {
-      path: '/joueurs',
-      name: 'Joueurs',
+      path: '/players',
+      name: 'Players',
       component: Players
     },
     {
-      path: '/jeux',
-      name: 'Jeux',
+      path: '/games',
+      name: 'Games',
       component: Games
     },
     {
-      path: '/creerPartie',
-      name: 'Créer une partie',
+      path: '/createPlay',
+      name: 'CreatePlay',
       component: CreatePlay
     },
     {
-      path: '/creerJoueur',
-      name: 'Créer un joueur',
+      path: '/createPlayer',
+      name: 'CreatePlayer',
       component: CreatePlayer
     },
     {
-      path: '/creerJeu',
-      name: 'Créer un jeu',
+      path: '/createGame',
+      name: 'CreateGame',
       component: CreateGame
     }
   ]

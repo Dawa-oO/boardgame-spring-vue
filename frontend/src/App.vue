@@ -1,27 +1,36 @@
 <template>
-  <div id="app">
-    <Header />
-    <router-view/>
-  </div>
+  <v-app>
+    <!------------------>
+    <!------ Menu ------>
+    <!------------------>
+    <Menu />
+    <!------------------>
+    <!------ Body ------>
+    <!------------------>
+    <v-main>
+      <v-container class="px-4 py-0 fill-height" fluid>
+        <v-row class="fill-height">
+          <v-col>
+            <transition name="fade" mode="out-in" appear>
+              <router-view transition="slide-x-transition" />
+            </transition>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
-  import Header from "./components/Header"
-  export default {
-    name: "App",
-    components: {
-      Header
-    }
-  }
+import Menu from "@/components/Menu";
 
+export default {
+  name: "App",
+  components: {
+    Menu,
+  },
+};
 </script>
 
-<style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: rgba(0,0,0,.9);
-  }
+<style lang="scss">
 </style>
