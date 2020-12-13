@@ -7,7 +7,7 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-icon>mdi-account</v-icon> -->
+      <v-icon v-if="isConnected" @click="disconnect">mdi-exit-to-app</v-icon>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -118,10 +118,18 @@ export default {
     mini() {
       return this.$vuetify.breakpoint.smAndDown || this.toggleMini;
     },
+    isConnected() {
+      return this.$store.state.user.user != "";
+    },
     getConnectedUser() {
       return this.$store.state.user.user != ""
         ? this.$store.state.user.user
         : this.player.firstName;
+    },
+  },
+  methods: {
+    disconnect() {
+      this.$store.dispatch("disconnect");
     },
   },
 };
