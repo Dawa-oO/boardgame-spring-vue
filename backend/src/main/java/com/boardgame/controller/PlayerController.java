@@ -89,4 +89,10 @@ public class PlayerController {
         return id != null ? playerRepository.findById(id).map(translator::translatePlayerToPlayerDto).orElse(null) : null;
     }
 
+    @ApiOperation(value="Retrieve players by pseudo")
+    @GetMapping("player/{pseudo}")
+    public @ResponseBody List<PlayerDto> getPlayersByPseudo(@PathVariable String pseudo) {
+        return StreamSupport.stream(playerRepository.findByPseudo(pseudo).spliterator(), false).map(translator::translatePlayerToPlayerDto).collect(Collectors.toList());
+    }
+
 }
