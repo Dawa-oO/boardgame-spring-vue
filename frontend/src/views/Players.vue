@@ -6,12 +6,49 @@
     <div v-if="loading" class="text-center">
       <Loader />
     </div>
+    <!-------------------------->
+    <!------ Search field ------>
+    <!-------------------------->
     <div v-else>
       <v-row>
-        <v-col v-for="player in players" :key="player.id" sm="4">
-          <PlayerItem v-bind:player="player" />
+        <v-col cols="12" md="4">
+          <v-text-field v-model="searchQuery" label="Pseudo ou prénom..." />
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-btn elevation="3" @click="clear" color="primary"
+            >Réinitialiser</v-btn
+          >
         </v-col>
       </v-row>
+
+      <!---------------------->
+      <!------- Joueurs ------>
+      <!---------------------->
+      <div v-if="filteredList == null">
+        <v-row>
+          <v-col v-for="player in players" :key="player.id" sm="4">
+            <PlayerItem v-bind:player="player" />
+          </v-col>
+        </v-row>
+      </div>
+      <!-- Aucun résultat trouvé lors de la recherche -->
+      <div v-else-if="filteredList.length == 0">
+        <h2>Désolé</h2>
+        <p>Aucun résultat trouvé..</p>
+      </div>
+      <!-- Des résultats ont été trouvés lors de la recherche -->
+      <div v-else>
+        <h1>
+          {{ filteredList.length }} résultat<span v-if="filteredList.length > 1"
+            >s</span
+          >
+        </h1>
+        <v-row>
+          <v-col v-for="player in filteredList" :key="player.id" sm="4">
+            <PlayerItem v-bind:player="player" />
+          </v-col>
+        </v-row>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +66,7 @@ export default {
   data() {
     return {
       loading: false,
+      searchQuery: "",
       players: [],
     };
   },
@@ -50,6 +88,26 @@ export default {
           this.players = res.data;
         })
         .catch((err) => console.log(err));
+    },
+    clear() {
+      this.searchQuery = "";
+    },
+  },
+  computed: {
+    filteredList() {
+      if (this.searchQuery) {
+        return this.players.filter(
+          (player) =>
+            player.pseudo
+              .toUpperCase()
+              .indexOf(this.searchQuery.toUpperCase()) !== -1 ||
+            player.firstName
+              .toUpperCase()
+              .indexOf(this.searchQuery.toUpperCase()) !== -1
+        );
+      } else {
+        return null;
+      }
     },
   },
 };
