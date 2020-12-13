@@ -1,112 +1,114 @@
 <template>
   <div class="home">
-    <!-- Page Content -->
-    <div class="container">
-      <!-- 1st row -->
-      <div class="row">
-        <!-- Card 1x1 -->
-        <CardImage v-bind:row="row1" />
-        <!-- Card 2x1 -->
-        <CardText v-bind:row="row3" />
-        <!-- Card 3x1 -->
-        <CardImage v-bind:row="row2" />
-      </div>
-
-      <!-- 2nd row -->
-      <div class="row">
-        <!-- Card 1x2 -->
-        <CardImage v-bind:row="row4" />
-        <!-- Card 2x2 -->
-        <CardImage v-bind:row="row5" />
-        <!-- Card 2x2 -->
-        <CardImage v-bind:row="row6" />
-      </div>
-    </div>
+    <v-row>
+      <v-col sm="4">
+        <ImageItem v-bind:item="topJeu" />
+      </v-col>
+      <v-col sm="4">
+        <TextItem v-bind:item="totalPlay" />
+      </v-col>
+      <v-col sm="4">
+        <ImageItem v-bind:item="topPlayer" />
+      </v-col>
+      <v-col sm="4">
+        <ImageItem v-bind:item="lastGame1" />
+      </v-col>
+      <v-col sm="4">
+        <ImageItem v-bind:item="lastGame2" />
+      </v-col>
+      <v-col sm="4">
+        <ImageItem v-bind:item="lastGame3" />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 
 <script>
-  import axios from 'axios';
-  import CardImage from "../components/CardImage";
-  import CardText from "../components/CardText";
+import ImageItem from "@/components/ImageItem";
+import TextItem from "@/components/TextItem";
 
-  export default {
-    name: 'Home',
-    components: {
-      CardImage,
-      CardText
-    },
-    data() {
-      return {
-        row1 : {
-          label: "",
-          image_url: ""
-        },
-        row2: {
-          label: "",
-          image_url: ""
-        },
-        row3 : {
-          label1 : "",
-          label2 : 0
-        },
-        row4: {
-          label: "",
-          image_url: ""
-        },
-        row5: {
-          abel: "",
-          image_url: ""
-        },
-        row6: {
-          label: "",
-          image_url: ""
-        }
-      }
-    },
-    created() {
-      // Get TOP game
-      axios.get(this.$backUrl + '/games/topGame')
-              .then(res => {
-                this.row1.label = "Top jeu";
-                this.row1.image_url = this.$backUrl + `/images/games/${res.data.id}.jpg`;
-              })
-              .catch(err => console.log(err));
-      // Get TOP player
-      axios.get(this.$backUrl + '/players/topPlayer')
-              .then(res => {
-                this.row2.label = "Top joueur";
-                this.row2.image_url = this.$backUrl + `/images/players/${res.data.id}.jpg`;
-              })
-              .catch(err => console.log(err));
-      // Get total game played
-      axios.get(this.$backUrl + '/plays/total')
-              .then(res => {
-                this.row3.label1 = "Total parties jouées";
-                this.row3.label2 = res.data;
-              })
-              .catch(err => console.log(err));
-      // Get last three played games
-      axios.get(this.$backUrl + '/games/lastThree')
-              .then(res => {
-                this.row4.label = "Derniers jeux joués";
-                this.row4.image_url  = this.$backUrl + `/images/games/${res.data[0].id}.jpg`;
+export default {
+  name: "Home",
+  components: {
+    ImageItem,
+    TextItem,
+  },
+  data() {
+    return {
+      topJeu: {
+        label: "",
+        image_url: "",
+      },
+      totalPlay: {
+        label: "",
+        nbVictory: 0,
+      },
+      topPlayer: {
+        label: "",
+        image_url: "",
+      },
+      lastGame1: {
+        label: "",
+        image_url: "",
+      },
+      lastGame2: {
+        abel: "",
+        image_url: "",
+      },
+      lastGame3: {
+        label: "",
+        image_url: "",
+      },
+    };
+  },
+  created() {
+    // Get TOP game
+    this.axios
+      .get(this.$backUrl + "/games/topGame")
+      .then((res) => {
+        this.topJeu.label = "Top jeu";
+        this.topJeu.image_url =
+          this.$backUrl + `/images/games/${res.data.id}.jpg`;
+      })
+      .catch((err) => console.log(err));
+    // Get total game played
+    this.axios
+      .get(this.$backUrl + "/plays/total")
+      .then((res) => {
+        this.totalPlay.label = "Total parties jouées";
+        this.totalPlay.nbVictoires = res.data;
+      })
+      .catch((err) => console.log(err));
+    // Get TOP player
+    this.axios
+      .get(this.$backUrl + "/players/topPlayer")
+      .then((res) => {
+        this.topPlayer.label = "Top joueur";
+        this.topPlayer.image_url =
+          this.$backUrl + `/images/players/${res.data.id}.jpg`;
+      })
+      .catch((err) => console.log(err));
+    // Get last three played games
+    this.axios
+      .get(this.$backUrl + "/games/lastThree")
+      .then((res) => {
+        this.lastGame1.label = "Derniers jeux joués";
+        this.lastGame1.image_url =
+          this.$backUrl + `/images/games/${res.data[0].id}.jpg`;
 
-                this.row5.label = "Derniers jeux joués";
-                this.row5.image_url  = this.$backUrl + `/images/games/${res.data[1].id}.jpg`;
+        this.lastGame2.label = "Derniers jeux joués";
+        this.lastGame2.image_url =
+          this.$backUrl + `/images/games/${res.data[1].id}.jpg`;
 
-                this.row6.label = "Derniers jeux joués";
-                this.row6.image_url  = this.$backUrl + `/images/games/${res.data[2].id}.jpg`;
-              })
-              .catch(err => console.log(err));
-    }
-  }
+        this.lastGame3.label = "Derniers jeux joués";
+        this.lastGame3.image_url =
+          this.$backUrl + `/images/games/${res.data[2].id}.jpg`;
+      })
+      .catch((err) => console.log(err));
+  },
+};
 </script>
 
 <style scoped>
-  .home {
-    text-align: left;
-    margin-top: 1.5%;
-  }
 </style>
