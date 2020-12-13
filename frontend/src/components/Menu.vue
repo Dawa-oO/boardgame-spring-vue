@@ -33,7 +33,8 @@
       </v-list>
       <v-list-item class="px-2" @click="toggleMini = !toggleMini">
         <v-list-item-avatar>
-          <v-icon>mdi-account-outline</v-icon>
+          <v-icon v-if="isConnected">mdi-account-outline</v-icon>
+          <v-icon v-else>mdi-account-off</v-icon>
         </v-list-item-avatar>
         <v-list-item-content class="text-truncate">
           {{ getConnectedUser }}

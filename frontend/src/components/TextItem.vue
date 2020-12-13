@@ -1,10 +1,15 @@
 <template>
   <v-card height="200">
-    <v-card-title class="headline">{{ item.label }}</v-card-title>
-
-    <v-card-text>
-      <div>{{ item.nbVictoires }}</div>
-    </v-card-text>
+    <div class="d-flex flex-no-wrap justify-space-between">
+      <div>
+        <v-card-title class="headline">{{ item.label }}</v-card-title>
+      </div>
+      <div class="ml-auto">
+        <v-card-text>
+          <h1>{{ item.nbVictoires }}</h1>
+        </v-card-text>
+      </div>
+    </div>
   </v-card>
 </template>
 
