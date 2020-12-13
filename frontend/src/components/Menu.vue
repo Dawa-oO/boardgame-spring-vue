@@ -36,7 +36,7 @@
           <v-icon>mdi-account-outline</v-icon>
         </v-list-item-avatar>
         <v-list-item-content class="text-truncate">
-          {{ player.pseudo }}
+          {{ getConnectedUser }}
         </v-list-item-content>
         <v-btn icon small>
           <v-icon>mdi-chevron-left</v-icon>
@@ -111,12 +111,17 @@ export default {
           icon: "mdi-gamepad-up",
         },
       ],
-      player: { pseudo: "Golgoth" },
+      player: { firstName: "Non connecté" },
     };
   },
   computed: {
     mini() {
       return this.$vuetify.breakpoint.smAndDown || this.toggleMini;
+    },
+    getConnectedUser() {
+      return this.$store.state.user.user != ""
+        ? this.$store.state.user.user
+        : this.player.firstName;
     },
   },
 };

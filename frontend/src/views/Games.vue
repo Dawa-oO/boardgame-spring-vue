@@ -55,13 +55,14 @@
 </template>
 
 <script>
-// import Loader from "@/components/Loader";
+import Loader from "@/components/Loader";
 import GameItem from "@/components/GameItem";
 
 export default {
   name: "Games",
   components: {
     GameItem,
+    Loader,
   },
   data() {
     return {
